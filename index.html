@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>115學年度第1學期第2次段考（B卷）化學複習網站</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <!-- 左側導覽列 -->
+    <aside id="sidebar" class="sidebar" aria-label="主導覽列">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">⚗️</div>
+        <div>
+          <div class="brand-title">生活化學段考通</div>
+          <div class="brand-sub">115-1 第2次段考 B卷</div>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">📊</span>
+          <span>總覽儀表板</span>
+        </button>
+        <button class="nav-item" data-view="practice">
+          <span class="nav-icon">✏️</span>
+          <span>智慧刷題練習</span>
+        </button>
+        <button class="nav-item" data-view="exam">
+          <span class="nav-icon">📝</span>
+          <span>仿真模擬段考</span>
+        </button>
+        <button class="nav-item" data-view="flashcards">
+          <span class="nav-icon">🃏</span>
+          <span>互動翻轉記憶卡</span>
+        </button>
+        <button class="nav-item" data-view="wrongbook">
+          <span class="nav-icon">📌</span>
+          <span>錯題本與搜尋</span>
+          <span id="nav-wrong-badge" class="nav-badge" hidden>0</span>
+        </button>
+        <button class="nav-item" data-view="guides">
+          <span class="nav-icon">📖</span>
+          <span>考前重點整理</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="btn-sidebar-paper" class="btn btn-sm" type="button">🖼️ 查看原始考卷圖檔</button>
+        <button id="btn-sidebar-backup" class="btn btn-sm" type="button">💾 備份／還原學習紀錄</button>
+        <button id="btn-sidebar-shortcuts" class="btn btn-sm" type="button">⌨️ 鍵盤快捷鍵說明</button>
+      </div>
+    </aside>
+
+    <!-- 主內容區 -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="btn-menu-toggle" class="menu-toggle" type="button" aria-label="開啟選單">☰</button>
+          <div id="page-title" class="page-title-bar">總覽儀表板</div>
+        </div>
+        <div class="topbar-actions">
+          <button id="btn-quick-search" class="btn btn-sm" type="button">🔍 搜尋題庫</button>
+          <button id="btn-open-paper" class="btn btn-sm" type="button">📄 原卷對照</button>
+          <button id="btn-theme-toggle" class="btn btn-sm" type="button" aria-label="切換深淺色主題">🌙 深色</button>
+        </div>
+      </header>
+
+      <main class="content-wrap">
+        <!-- 1. 總覽儀表板 -->
+        <section id="view-dashboard" class="view-section active" aria-labelledby="page-title">
+          <div id="dashboard-content"></div>
+        </section>
+
+        <!-- 2. 智慧刷題練習 -->
+        <section id="view-practice" class="view-section">
+          <div class="filter-toolbar">
+            <select id="practice-topic" class="select" aria-label="單元篩選"></select>
+            <select id="practice-status" class="select" aria-label="作答狀態篩選">
+              <option value="all">全部題目 (35)</option>
+              <option value="unanswered">尚未練習</option>
+              <option value="wrong">曾答錯／待加強</option>
+              <option value="bookmarked">已收藏題目</option>
+            </select>
+            <input id="practice-search" class="input" type="search" placeholder="關鍵字篩選（如：蛋白、肥皂、沸點）" />
+            <label class="toggle-chip">
+              <input id="chk-shuffle-q" type="checkbox" /> 題目隨機
+            </label>
+            <label class="toggle-chip">
+              <input id="chk-shuffle-opt" type="checkbox" /> 選項打亂
+            </label>
+            <button id="btn-practice-reset-filter" class="btn btn-sm" type="button">重設篩選</button>
+          </div>
+
+          <div class="practice-layout">
+            <div id="practice-question-area"></div>
+            <div>
+              <div class="card">
+                <div class="card-title">
+                  <span>題號導覽</span>
+                  <span id="practice-count-pill" class="pill">0 / 35</span>
+                </div>
+                <div id="practice-nav-grid" class="q-grid"></div>
+                <div style="margin-top:12px; font-size:12px; color:var(--text-subtle); display:flex; gap:10px; flex-wrap:wrap;">
+                  <span>🟢 答對</span>
+                  <span>🔴 答錯</span>
+                  <span>⚪ 未答</span>
+                  <span>🟡 收藏</span>
+                </div>
+              </div>
+
+              <div class="card note-box">
+                <div class="card-title">
+                  <span>📝 本題筆記</span>
+                  <span id="note-saved-hint" style="font-size:12px; color:var(--emerald); font-weight:600;"></span>
+                </div>
+                <textarea id="practice-note-input" class="textarea" placeholder="記錄這題的易錯點、口訣或老師提醒..."></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. 仿真模擬段考 -->
+        <section id="view-exam" class="view-section">
+          <div id="exam-container"></div>
+        </section>
+
+        <!-- 4. 互動翻轉記憶卡 -->
+        <section id="view-flashcards" class="view-section">
+          <div id="flashcards-container"></div>
+        </section>
+
+        <!-- 5. 錯題本與全題庫搜尋 -->
+        <section id="view-wrongbook" class="view-section">
+          <div id="wrongbook-container"></div>
+        </section>
+
+        <!-- 6. 考前重點整理 -->
+        <section id="view-guides" class="view-section">
+          <div id="guides-container"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- 原卷影像對照 Modal -->
+  <div id="modal-paper" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-paper-title">
+    <div class="modal-box modal-xl">
+      <div class="modal-header">
+        <strong id="modal-paper-title">📄 原始考卷題庫圖檔對照</strong>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button id="btn-paper-p1" class="btn btn-sm btn-primary" type="button">第 1–20 題 (29444_0.jpg)</button>
+          <button id="btn-paper-p2" class="btn btn-sm" type="button">第 21–35 題 (29443_0.jpg)</button>
+          <button id="btn-zoom-out" class="btn btn-sm" type="button">－</button>
+          <span id="paper-zoom-label" style="font-size:13px; font-weight:700; min-width:46px; text-align:center;">100%</span>
+          <button id="btn-zoom-in" class="btn btn-sm" type="button">＋</button>
+          <button id="btn-zoom-reset" class="btn btn-sm" type="button">重置</button>
+          <button class="btn btn-sm" data-close-modal="modal-paper" type="button">✕ 關閉</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="exam-img-stage">
+          <img id="paper-preview-img" src="29444_0.jpg" alt="段考複習卷原始圖檔" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 鍵盤快捷鍵 Modal -->
+  <div id="modal-shortcuts" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <strong>⌨️ 鍵盤快捷鍵指南</strong>
+        <button class="btn btn-sm" data-close-modal="modal-shortcuts" type="button">✕</button>
+      </div>
+      <div class="modal-body">
+        <table class="guide-table">
+          <thead>
+            <tr><th>快捷鍵</th><th>適用頁面</th><th>功能說明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>A / B / C / D</code> 或 <code>1–4</code></td><td>刷題、模擬考</td><td>快速選擇對應選項</td></tr>
+            <tr><td><code>←</code> / <code>→</code></td><td>刷題、模擬考</td><td>切換上一題／下一題</td></tr>
+            <tr><td><code>F</code></td><td>刷題／模擬考</td><td>收藏本題／標記待檢查</td></tr>
+            <tr><td><code>S</code></td><td>智慧刷題</td><td>展開或收合詳細解析</td></tr>
+            <tr><td><code>Space</code></td><td>翻轉記憶卡</td><td>翻轉卡片正反面</td></tr>
+            <tr><td><code>1 / 2 / 3</code></td><td>記憶卡背面</td><td>評分：還不熟 / 有點模糊 / 完全記住</td></tr>
+            <tr><td><code>Esc</code></td><td>全域</td><td>關閉彈出視窗</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 資料備份與重置 Modal -->
+  <div id="modal-backup" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <strong>💾 學習紀錄備份、匯入與重置</strong>
+        <button class="btn btn-sm" data-close-modal="modal-backup" type="button">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-top:0; color:var(--text-muted); font-size:14px;">
+          所有作答統計、錯題本、收藏夾、個人筆記與模擬考成績均自動保存在瀏覽器本地（<code>localStorage</code>）。您可以匯出 JSON 備份檔保存或轉移到其他裝置。
+        </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+          <button id="btn-export-json" class="btn btn-primary" type="button">⬇️ 匯出學習紀錄 (.json)</button>
+          <label class="btn" style="cursor:pointer;">
+            ⬆️ 匯入備份檔 (.json)
+            <input id="input-import-json" type="file" accept=".json,application/json" hidden />
+          </label>
+        </div>
+        <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;" />
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <span style="font-size:13.5px; color:var(--rose); font-weight:700;">清除所有作答、錯題與模擬考紀錄</span>
+          <button id="btn-reset-all" class="btn btn-rose btn-sm" type="button">🗑️ 全部重置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 模擬考交卷確認 Modal -->
+  <div id="modal-exam-submit" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <strong>📝 確認繳交模擬段考卷？</strong>
+        <button class="btn btn-sm" data-close-modal="modal-exam-submit" type="button">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="exam-submit-summary" style="font-size:15px; margin-top:0;"></p>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:18px;">
+          <button class="btn" data-close-modal="modal-exam-submit" type="button">繼續檢查</button>
+          <button id="btn-confirm-submit-exam" class="btn btn-primary" type="button">確定交卷計分</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
